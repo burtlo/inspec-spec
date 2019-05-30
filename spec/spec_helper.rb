@@ -48,7 +48,7 @@ shared_context 'InSpec Resource', type: :inspec_resource do
     #   all the environment builders in th current context and their
     #   parent contexts.
     let(:backend) do
-      env_builders = self.class.parent_groups.map { |parent| parent.environment_builder }.compact
+      env_builders = self.class.parent_groups.map(&:environment_builder).compact
       starting_double = RSpec::Mocks::Double.new('backend')
       env_builders.inject(starting_double) { |acc, elem| elem.evaluate(self, acc) }
     end
