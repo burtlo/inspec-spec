@@ -21,7 +21,12 @@ run it from where it embedded within your InSpec installation.
 $ /opt/inspec/embedded/bin/rspec
 ```
 
-Alternatively you can install the gem version of InSpec using bundler
+Alternatively, if you have a ruby development environment you can install the
+gem version of InSpec using bundler.
+
+**Note:** This will install several gems into your ruby environment which can
+conflict with a standlone install of InSpec if you don't use something like
+chruby or rvm to mange your `GEM_PATH`s
 
 ```bash
 $ bundle install
