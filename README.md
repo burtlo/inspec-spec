@@ -27,17 +27,19 @@ To setup the testing within your profile you will need to create
 a `spec` directory and add the `spec/spec_helper.rb` file found
 in this repository.
 
-Within your `spec/spec_helper.rb` you will need to require all
-the inspec resources defined in the profile's `libraries` directory.
+Within your `spec/spec_helper.rb` or in the individual `spec` test files
+you will need to require all the InSpec resources defined in the profile's
+`libraries` directory.
 
 ```ruby
 require 'inspec'
 require 'rspec/its'
-require 'libraries/ohai.rb'
 
 # To test each of your resources, they will need to be required
-# to have the InSpe registry know about it.
-require 'libraries/ohai.rb'
+# to have the InSpec registry know about it.
+# You can choose to add them here for all of the spec test files or
+# individually in each of the spec test files.
+# require 'libraries/ohai.rb'
 
 # ... rest of the spec_helper.rb ...
 ```
@@ -72,6 +74,9 @@ test, through the `resource` helper.
 
 ```ruby
 require 'spec_helper'
+# To test each of your resources, they will need to be required
+# to have the InSpec registry know about it, if not required in the spec_helper
+# require 'libraries/ohai.rb'
 
 describe_inspec_resource 'ohai' do
   context 'relying on the automatic path' do
