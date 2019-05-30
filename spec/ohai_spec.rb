@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'libraries/ohai.rb'
 
 describe_inspec_resource 'ohai' do
 
@@ -30,7 +31,7 @@ describe_inspec_resource 'ohai' do
       context 'nested attributes' do
         environment do
           command('/path/to/ohai').returns(result: {
-            stdout: '{ "cpu": { "cores": 4 } }', exit_status: 0 
+            stdout: '{ "cpu": { "cores": 4 } }', exit_status: 0
           })
         end
 
@@ -44,9 +45,9 @@ describe_inspec_resource 'ohai' do
       # Specifying an attribute as a parameter focuses the ohai run to only
       # that attribute. This makes ohai run quicker as it ignores all other
       # attributes.
-      
+
         # NOTE: Because of the way the environment helper works a let helper will not work:
-        # 
+        #
         # let(:chef_packages_stdout) do
         #   <<~STDOUT
         #     {
@@ -118,7 +119,7 @@ describe_inspec_resource 'ohai' do
     end
 
     context 'with mulitple attribute parameters' do
-      # When you provide multiple attributes as parameters ohai will 
+      # When you provide multiple attributes as parameters ohai will
       # return multiple JSON objects next each other in the output. This
       # requires that the output be correctly partitioned and then assigned
       # back to the parameter that was provided
@@ -142,7 +143,7 @@ describe_inspec_resource 'ohai' do
           stdout: ohai_stdout, exit_status: 0
         })
       end
-      
+
       it 'two attributes are accessible via dot-notation' do
         # NOTE: Initially I thought that when specifying an attribute the interface of the resource
         #   should change so that the attribute name would not have to be repeated. But you can
@@ -213,7 +214,7 @@ describe_inspec_resource 'ohai' do
         })
       end
 
-      it 'fails with error' do        
+      it 'fails with error' do
         expect { resource.os }.to raise_error(OhaiResource::ResultsParsingError)
       end
     end
@@ -225,12 +226,12 @@ describe_inspec_resource 'ohai' do
         command('which ohai').returns(stdout: '')
       end
 
-      it 'fails with error' do        
+      it 'fails with error' do
         expect { resource.os }.to raise_error(OhaiResource::PathCouldNotBeFound)
       end
     end
   end
-  
+
   context 'when a valid path is provided' do
     environment do
       command('/another/path/to/ohai').returns(result: {

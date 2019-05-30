@@ -1,15 +1,14 @@
 require 'inspec'
 require 'rspec/its'
-require 'libraries/ohai.rb'
 
 # To test each of your resources, they will need to be required
-# to have the InSpe registry know about it.
-# 
+# to have the InSpec registry know about it.
+#
 #     require './libraries/ohai.rb'
 
 RSpec.configure do |config|
   #
-  # Add a convienent name for the example group to the RSpec 
+  # Add a convienent name for the example group to the RSpec
   # lexicon. This enables a user to write:
   #     describe_inspec_resource 'ohai'
   #
@@ -26,7 +25,7 @@ shared_context 'InSpec Resource', type: :inspec_resource do
   let(:resource_name) { self.class.top_level_description }
 
   # Find the resource in the registry based on the resource_name.
-  #   The resource classes stored here are not exactly instances 
+  #   The resource classes stored here are not exactly instances
   #   of the Resource class (e.g. OhaiResource). They are
   #   instead wrapped with the backend transport mechanism which
   #   they will be executed against.
@@ -45,11 +44,11 @@ shared_context 'InSpec Resource', type: :inspec_resource do
     environment_builder(DoubleBuilder.new(&block))
 
     # Create a backend helper which will generate a backend double
-    #   based on the definitions that have been building up in 
+    #   based on the definitions that have been building up in
     #   all the environment builders in th current context and their
     #   parent contexts.
     let(:backend) do
-      env_builders = self.class.parent_groups.map { |parent| parent.environment_builder }.compact
+      env_builders = self.class.parent_groups.map(&:environment_builder).compact
       starting_double = RSpec::Mocks::Double.new('backend')
       env_builders.inject(starting_double) { |acc, elem| elem.evaluate(self, acc) }
     end
