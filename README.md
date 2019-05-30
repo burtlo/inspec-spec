@@ -21,6 +21,13 @@ run it from where it embedded within your InSpec installation.
 $ /opt/inspec/embedded/bin/rspec
 ```
 
+Alternatively you can install the gem version of InSpec using bundler
+
+```bash
+$ bundle install
+$ bundle exec rspec
+```
+
 ## Setup
 
 To setup the testing within your profile you will need to create
