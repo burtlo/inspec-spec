@@ -2,7 +2,7 @@ require 'inspec'
 require 'rspec/its'
 
 # To test each of your resources, they will need to be required
-# to have the InSpe registry know about it.
+# to have the InSpec registry know about it.
 #
 #     require './libraries/ohai.rb'
 
