@@ -3,9 +3,12 @@ require 'libraries/example'
 
 describe_inspec_resource 'example' do
   context 'on windows' do
-    let(:platform) { 'windows' }
+    # This helper method here is the equivalent to the first line within the environment
+    #   that defines an os that returns a true when the names align.
+    # let(:platform) { 'windows' }
 
     environment do
+      os.returns(windows?: true)
       command('C:\example\bin\example.bat --version').returns(stdout: '0.1.0 (windows-build)')
     end
 
