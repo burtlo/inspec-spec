@@ -48,7 +48,20 @@ shared_context 'InSpec Resource', type: :inspec_resource do
     #   all the environment builders in th current context and their
     #   parent contexts.
     let(:backend) do
-      env_builders = self.class.parent_groups.map(&:environment_builder).compact
+
+      platform_builder = if platform
+        # For all the possible platforms assign a false result unless the platform name matches
+        possible_platforms = %w{aix? redhat? debian? suse? bsd? solaris? linux? unix? windows? hpux? darwin?}
+        os_platform_mock_results = possible_platforms.inject({}) { |acc, elem| acc[elem] = (elem[0..-2] == platform.to_s) ; acc }
+
+        DoubleBuilder.new { os.returns(os_platform_mock_results) }
+      else
+        DoubleBuilder.new do
+          # no-op
+        end
+      end
+
+      env_builders = [ platform_builder ] + self.class.parent_groups.map(&:environment_builder).compact
       starting_double = RSpec::Mocks::Double.new('backend')
       env_builders.inject(starting_double) { |acc, elem| elem.evaluate(self, acc) }
     end
