@@ -48,7 +48,12 @@ shared_context 'InSpec Resource', type: :inspec_resource do
     #   all the environment builders in th current context and their
     #   parent contexts.
     let(:backend) do
-      env_builders = self.class.parent_groups.map(&:environment_builder).compact
+      # For all the possible platforms assign a false result unless the platform name matches
+      possible_platforms = %w{aix redhat debian suse bsd solaris linux unix windows hpux darwin}
+      os_platform_mock_results = possible_platforms.inject({}) { |acc, elem| acc["#{elem}?"] = (elem == platform.to_s) ; acc }
+      platform_builder = DoubleBuilder.new { os.returns(os_platform_mock_results) }
+
+      env_builders = [ platform_builder ] + self.class.parent_groups.map(&:environment_builder).compact
       starting_double = RSpec::Mocks::Double.new('backend')
       env_builders.inject(starting_double) { |acc, elem| elem.evaluate(self, acc) }
     end
@@ -62,6 +67,11 @@ shared_context 'InSpec Resource', type: :inspec_resource do
   # Provide an alias of the resource to subject. By setting the subject
   #   creates an implicit subject to work with the `rspec-its`.
   let(:subject) { resource }
+
+  # Provide a helper to help define the environment where the plugin is run in the unit tests
+  let(:platform) do
+    "spec"
+  end
 
   # This is a no-op backend that should be overridden.
   #   Below is a helper method #environment which provides some
